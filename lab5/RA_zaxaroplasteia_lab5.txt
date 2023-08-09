@@ -1,0 +1,208 @@
+------------------------------------
+1. Βρείτε τα ονόματα των πελατών που συχνάζουν στο "Gelato".
+------------------------------------
+Ερώτημα/Query:
+
+π Pelatis(σ Zaxaroplasteio='Gelato' SYXNAZEI)
+
+
+Αποτέλεσμα/Result:
+    'Timis'
+    'Tzimis'
+	
+------------------------------------
+2. Βρείτε τα φρούτα, με των οποίων τις γεύσεις τα γλυκά προσφέρονται στο "Edelweiss" για 3 ευρώ ή λιγότερο.
+------------------------------------
+Ερώτημα/Query:
+
+R2 = (σ Timi≤3 (σ Zaxaroplasteio='Edelweiss' PROSFEREI))
+R3 = π Onoma,Frouto GLYKO
+R4= R3 join  Onoma=Glyko R2
+R5 = π Frouto R4
+R5
+
+
+
+
+Αποτέλεσμα/Result:
+
+GLYKO.Frouto
+'Mouro'
+'Kerasi'
+'Banana'
+
+
+------------------------------------
+3. Βρείτε τα ονόματα των ζαχαροπλαστείων που προσφέρουν τουλάχιστον ένα γλυκό που να αρέσει στην Ρίτα και που δεν κοστίζει περισσότερο από 2.50 ευρώ.
+------------------------------------
+Ερώτημα/Query:
+
+R1 = π Glyko (σ Pelatis='Rita' PROTIMA) -- Glyka ritas
+R2 = σ Timi≤2.5 (PROSFEREI join R1)
+R3 = π Zaxaroplasteio R2
+R3
+
+
+Αποτέλεσμα/Result:
+
+PROSFEREI.Zaxaroplasteio
+'Zoom'
+
+------------------------------------
+4. Βρείτε τα ονόματα των πελατών που τρώνε πάβλοβα και μπλακ φόρεστ.
+------------------------------------
+Ερώτημα/Query:
+
+R1 = π Pelatis (σ Glyko='Pavlova' PROTIMA )  
+R2 = π Pelatis (σ Glyko='Black Forest' PROTIMA)
+R1 intersect R2
+
+Αποτέλεσμα/Result:
+
+PROTIMA.Pelatis
+
+'Tzimis'
+'Timis'
+
+------------------------------------
+5. Βρείτε τα ονόματα των ζαχαροπλαστείων στα οποία δεν συχνάζει ο Μίμης.
+------------------------------------
+Ερώτημα/Query:
+
+R1 = π Zaxaroplasteio (σ Pelatis='Mimis' SYXNAZEI)
+R2 =  π Onoma ZAXAROPLASTEIO  - R1
+R2
+
+Αποτέλεσμα/Result:
+
+ZAXAROPLASTEIO.Onoma
+'Caravel'
+'Zoom'
+'Gelato'
+
+
+------------------------------------
+6. Βρείτε τα ονόματα όλων των πελατών που συχνάζουν στο Edelweiss αλλά δεν προτιμούν κανένα από τα γλυκά που προσφέρονται εκεί.
+------------------------------------
+Ερώτημα/Query:
+
+R1 = π Pelatis (σ Zaxaroplasteio='Edelweiss' SYXNAZEI)
+R2 = R1 join PROTIMA 
+R3 = π Glyko (σ Zaxaroplasteio='Edelweiss' PROSFEREI)
+R4 = π Pelatis (R2 join R3)
+R5 = π Pelatis R2 - R4
+R5
+
+
+Αποτέλεσμα/Result:
+
+SYXNAZEI.Pelatis
+'Mimis'	
+
+------------------------------------
+7. Βρείτε τα ονόματα των πελατών που συχνάζουν σε ζαχαροπλαστεία που προσφέρουν γλυκά που προτιμούν.
+------------------------------------
+Ερώτημα/Query:
+
+R1 = π Pelatis ( PROTIMA join (SYXNAZEI join PROSFEREI))
+R1
+
+Αποτέλεσμα/Result:
+
+PROTIMA.Pelatis
+'Rita'
+'Tzimis'
+'Timis'
+'Tita'
+
+------------------------------------
+8. Βρείτε τα ονόματα των πελατών που συχνάζουν *μόνο* στα ζαχαροπλαστεία που προσφέρουν κάποια από τα γλυκά που προτιμούν.
+------------------------------------
+Ερώτημα/Query:
+
+
+-------------------------------------------------------------------------------------
+
+Αποτέλεσμα/Result:
+
+------------------------------------
+9. Βρείτε το πλήθος των ζαχαροπλαστείων που έχουν γλυκά που κοστίζουν το πολύ 2.50 ευρώ. 
+------------------------------------
+Ερώτημα/Query:
+
+R1 =  ( σ Timi≤2.5 PROSFEREI)
+γ count(Zaxaroplasteio)->Plithos(π Zaxaroplasteio R1) 
+
+
+Αποτέλεσμα/Result:
+
+Plithos
+4
+
+
+------------------------------------
+10. Για κάθε ζαχαροπλαστείο, βρείτε το πλήθος των πελατών που το συχνάζουν και οι οποίοι προτιμούν και τα δύο γλυκά Πάβλοβα και Μπλακ φόρεστ (δείξτε το ζαχαροπλαστείο και το πλήθος όσων προτιμούν τα δύο γλυκά).
+------------------------------------
+Ερώτημα/Query:
+
+R1 = π Pelatis (σ Glyko='Pavlova' PROTIMA )  
+R2 = π Pelatis (σ Glyko='Black Forest' PROTIMA)
+R3= R1 intersect R2
+
+
+R4 = SYXNAZEI join R3
+R5 = γ Zaxaroplasteio ; count(Pelatis)->Plithos(R4)
+R5
+
+
+
+
+Αποτέλεσμα/Result:
+
+SYXNAZEI.Zaxaroplasteio	Plithos
+'To Teleio'	1
+'Edelweiss'	1
+'Caravel'	2
+'Gelato'	2
+'Zoom'	2
+
+------------------------------------
+11. Για κάθε ζαχαροπλαστείο που προσφέρει Πάβλοβα, βρείτε το πλήθος των πελατών που συχνάζουν εκεί και προτιμούν Πορτοκαλόπιτα.
+------------------------------------
+Ερώτημα/Query:
+
+R1 =π Zaxaroplasteio ( σ Glyko='Pavlova' PROSFEREI)
+R2 = π Pelatis (σ Glyko='Portokalopita' PROTIMA)
+
+R3 = R1 join SYXNAZEI
+R4 = R3 join R2
+R4
+-- axarplasteio ; count(Pelatis) → Plithos(R4)
+
+Αποτέλεσμα/Result:
+
+R1 =π Zaxaroplasteio ( σ Glyko='Pavlova' PROSFEREI)
+R2 = π Pelatis (σ Glyko='Portokalopita' PROTIMA)
+
+R3 = R1 join SYXNAZEI
+R4 = R3 join R2
+γ Zaxaroplasteio ; count(Pelatis) → Plithos(R4)
+
+PROSFEREI.Zaxaroplasteio	Plithos
+'To Teleio'	2
+'Edelweiss'	2
+'Caravel'	1
+'Gelato'	1
+'Zoom'	1
+
+
+/*
+R1 =π Zaxaroplasteio,Pelatis SYXNAZEI 
+γ Zaxaroplasteio ; count(Pelatis) → Plithos (R1)
+
+
+PROTIMA j PROSFEREI j SYXNAZEI 
+Pekatis Syxzanezei 
+R2 - R1
+
+*/

@@ -1,0 +1,55 @@
+
+   
+  Ασφαλισμενος
+    ονομα
+    *αριθμος ασφαλιση
+    περιοχη κατοικια
+   
+  Γιατρος
+    Εδρα
+    Ονομα
+    *κωδικος
+   
+  Συμβολαιο
+    διαρκεια
+   
+  Φαρμακα
+    κοστος
+    *Ονομα
+   
+  Γενικος
+   
+  Ειδικος
+    ειδικευση
+   
+  συνταγη
+    ημερομηνια
+   
+  επισκεψη
+    ημερομηνια
+    λογος 
+   
+  Κατηγορια
+    *ονομα
+   
+   
+  Ασφαλισμενος-N-relationship_name0-N-Γενικος
+  relationship_name0:diamond
+  Γιατρος-N-relationship_name1-N-συνταγη
+  relationship_name1:diamond
+  επισκεψη-N-relationship_name2-N-Ειδικος
+  relationship_name2:diamond
+  επισκεψη-N-relationship_name3-N-συνταγη
+  relationship_name3:diamond
+  Ασφαλισμενος-N-relationship_name4-1-Συμβολαιο
+  relationship_name4:diamond
+  Συμβολαιο-1-relationship_name5-N-Κατηγορια
+  relationship_name5:diamond
+  Φαρμακα-N-relationship_name6-N-συνταγη
+  relationship_name6:diamond
+  Ασφαλισμενος-N-relationship_name7-N-επισκεψη
+  relationship_name7:diamond
+  Γιατρος-1-relationship_name8-N-επισκεψη
+  relationship_name8:diamond
+  Κατηγορια-1-relationship_name9-N-Φαρμακα
+  relationship_name9:diamond

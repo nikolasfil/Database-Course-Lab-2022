@@ -1,0 +1,191 @@
+------------------------------------
+1. Παράδειγμα: Βρείτε το όνομα και τη διεύθυνση όλων όσων εργάζονται στο τμήμα 'Research'
+1. Example: Find the name and address of everybody who works in the Dpt. 'Research'
+------------------------------------
+Ερώτημα/Query:
+R1 = σ Dname='Research' (DEPARTMENT)
+R2 = R1 join Dnumber=Dno EMPLOYEE
+π Fname, Lname, Address (R2)
+
+Αποτέλεσμα/Result:
+John	Smith	731 Fondren Houston TX
+Franklin	Wong	638 Voss Houstn TX
+Ramesh	Narayan	3321 Castle Spring TX
+Joyce	English	5631 Rice Houston TX
+
+------------------------------------
+2. Για κάθε έργο που βρίσκεται στο στο 'Stafford', βρείτε τον αριθμό του έργου, τον αριθμό του τμήματος που το ελέγχει καθώς και το επώνυμο, τη διεύθυνση και την ημερομηνία γέννησης του διευθυντή του τμήματος.
+2. For every project that is located in 'Stafford', find the project number, the department number that controls it as well as the surname, address and birthday of the department's manager.
+------------------------------------
+Ερώτημα/Query:
+
+
+R1 = σ Plocation='Stafford' PROJECT
+R2 = R1 join Dnum=Dnumber DEPARTMENT
+R3 = R2 join Mgr_ssn=Ssn EMPLOYEE
+R4 = π Pnumber,Dnumber,Lname,Address,Bdate R3
+R4
+
+
+
+Αποτέλεσμα/Result:
+
+PROJECT.Pnumber	DEPARTMENT.Dnumber	EMPLOYEE.Lname	EMPLOYEE.Address	EMPLOYEE.Bdate
+10	4	'Wallace'	'975 Fire Oak Jumble TX'	'20-JUN-31'
+30	4	'Wallace'	'975 Fire Oak Jumble TX'	'20-JUN-31'
+
+
+------------------------------------
+3. Φτιάξτε μια λίστα με τους αριθμούς των έργων για τα έργα που συμμετέχουν όσοι έχουν επώνυμο 'Smith', είτε σαν εργαζόμενοι είτε σαν διευθυντές των τμημάτων που ελέγχουν τα έργα αυτά.
+3. Construct a list with the project numbers for the projects where people with the surname 'Smith' are involved, either as employees or as managers of the departments that control these projects.
+------------------------------------
+Ερώτημα/Query:
+
+R1 = σ Lname='Smith' EMPLOYEE
+R2 = R1 join Dno =Dnumber DEPARTMENT
+
+R3 = R2 join Dnumber=Dnum PROJECT
+ 
+R4=π Pnumber R3
+R4
+
+
+
+Αποτέλεσμα/Result:
+
+PROJECT.Pnumber
+1
+2
+3
+20
+
+
+
+------------------------------------
+5. Βρείτε τα ονόματα των εργαζόμενων που δεν έχουν εξαρτώμενους.
+5. Find the names of the employees without dependents.
+------------------------------------
+
+Ερώτημα/Query:
+
+R1 = π Ssn EMPLOYEE
+R2 = π Essn DEPENDENT
+R3 = R1 - R2
+
+R4 = EMPLOYEE join R3
+R5 = π Fname, Minit,Lname R4
+R5
+
+Αποτέλεσμα/Result:
+
+EMPLOYEE.Fname	EMPLOYEE.Minit	EMPLOYEE.Lname
+'Alicia'	'J'	'Zelaya'
+'Ramesh'	'K'	'Narayan'
+'Joyce'	'A'	'English'
+'Ahmad'	'V'	'Jabbar'
+'James'	'E'	'Smith'
+
+------------------------------------
+6. Φτιάξτε μια λίστα με τα ονόματα των διευθυντών που έχουν εξαρτώμενους (χωρίς την πράξη της τομής).
+6. Construct a list with the names of the managers who have dependents (without using  intersection).
+------------------------------------
+Ερώτημα/Query:
+
+R1 = π Fname,Lname,Ssn EMPLOYEE
+R2 =  ρ Ssn <- Mgr_ssn DEPARTMENT
+R3 = R2 join R1
+R4 = R3  join Essn=Ssn DEPENDENT
+R5 = π Fname,Lname R4
+R5
+
+
+Αποτέλεσμα/Result:
+
+EMPLOYEE.Fname	EMPLOYEE.Lname
+'Franklin'	'Wong'
+'Jennifer'	'Wallace'
+
+
+------------------------------------
+7. Φτιάξτε μια λίστα με τα ονόματα των διευθυντών που έχουν εξαρτώμενους (χρησιμοποιώντας την τομή).
+7. Construct a list with the names of the managers who have dependents (with intersection).
+------------------------------------
+Ερώτημα/Query:
+
+R1 = π Fname,Lname,Ssn EMPLOYEE
+R2 =  ρ Ssn <- Mgr_ssn DEPARTMENT
+R3 = R1 join R2
+R32 = π Ssn R3
+R4 = π Essn DEPENDENT 
+R5 = R32 intersect R4
+R6 = R3 join R5
+R7 = π Fname,Lname,Ssn R6
+R7
+
+Αποτέλεσμα/Result:
+
+EMPLOYEE.Fname	EMPLOYEE.Lname	EMPLOYEE.Ssn
+'Franklin'	'Wong'	333445555
+'Jennifer'	'Wallace'	987654321
+
+
+
+
+------------------------------------
+9. Βρείτε τα ονόματα όλων των εργαζόμενων του τμήματος 5 που δουλεύουν πάνω από 10 ώρες την εβδομάδα στο έργο 'ProductX'.
+9. Find the names of all employees of department 5 who work more than 10 hours a week on project 'ProductX'.
+------------------------------------
+Ερώτημα/Query:
+
+R1 = σ Dno=5 EMPLOYEE
+R2 = R1 join Ssn=Essn WORKS_ON
+R3 = R2 join Pno=Pnumber PROJECT
+
+R4=σ Pname='ProductX' R3
+R5=σ Hours>10 R4
+π Fname,Minit,Lname R5
+
+
+Αποτέλεσμα/Result:
+
+EMPLOYEE.Fname	EMPLOYEE.Minit	EMPLOYEE.Lname
+'John'	'B'	'Smith'
+'Joyce'	'A'	'English'
+
+------------------------------------
+10. Βρείτε όλους τους εργαζόμενους που έχουν εξαρτώμενους με το ίδιο μικρό όνομα όπως και αυτοί.
+10. Find all employees who have dependents with the same first name as they.
+------------------------------------
+Ερώτημα/Query:
+
+R1 = EMPLOYEE join Ssn=Essn DEPENDENT 
+σ Fname=Dependent_name R1
+
+
+Αποτέλεσμα/Result:
+
+null
+
+------------------------------------
+11. Βρείτε τα ονόματα των εργαζομένων που επιβλέπει ο Franklin Wong.
+11. Find all employees who are supervised by Franklin Wong.
+------------------------------------
+
+Ερώτημα/Query:
+
+
+R1 = DEPARTMENT join Mgr_ssn=Ssn EMPLOYEE
+R2 = σ Fname ='Franklin' ∧ Lname='Wong' R1
+R3 = ρ Super_ssn <- Ssn (π Ssn R2)
+R4 = EMPLOYEE join R3
+π Fname,Lname R4 
+
+
+
+
+Αποτέλεσμα/Result:
+
+EMPLOYEE.Fname	EMPLOYEE.Lname
+'John'	'Smith'
+'Ramesh'	'Narayan'
+'Joyce'	'English'

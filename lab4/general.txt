@@ -1,0 +1,56 @@
+o employee εχει Key το ssn 
+
+καποιο απο τα χαρακτηριστικα του ειναι ποιο τμημα ανηκει , Dno 
+το Department  εχει κλειδι το dnyumber, το department εχει σαν 
+
+προισταμενιος ειναι ο supervisor, διευθυντης ειναι ο Manager
+
+dependent 
+θα επρεπε να εχει και κλειδι στο ονομα του εξαρτωμενουμ, καθως ειναι ασθενης ονοτητα 
+
+θελέι μονα εισαγωγικα 
+δεν θελει σε παρενθεση το DEPARTMENT 
+
+με = οριζω 
+R`=...
+
+Query ειναι πχ το R1 
+Καλω στο τελος το R1 για να το προβαλει 
+
+
+
+δουλευω την ασκηση στο txt 
+
+
+
+
+ψ63αε330α8311991φβ3524α432φ4φ7ψψ
+c63ae330a8311991fb3524a432f4f7cc
+
+
+
+μετοσονομασια project & department 
+Πλοψατιον 
+Πnumber 
+
+εχουμε ma=f=gr sssn , και μετα παω 
+
+
+-----------
+
+ask 2 
+
+project 
+
+R1 = σ Lname='Smith' EMPLOYEE
+R2 = R1 join Essn=Ssn WORKS_ON
+
+R3 = PROJECT join Dnum=Dnumber DEPARTMENT
+R4= R1 join Mgr_ssn=Ssn R3
+
+
+R6 = π Pno R2
+R7 = π Pnumber R4
+R4
+
+
